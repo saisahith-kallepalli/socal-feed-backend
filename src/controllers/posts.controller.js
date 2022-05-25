@@ -16,9 +16,12 @@ const pick = require("../utils/pick");
 const uploadPost = async (req, res, next) => {
   const { caption } = req.body;
   // let localFilePath = req.file.path;
-  console.log(req.files);
+  console.log(req.files, "hii");
   let result = await multipleImages(req.files, "feedImages");
-  console.log(result);
+  if (result.length === 0) {
+    res.status(401).send({ message: "upload valid image" });
+  }
+
   const dataPost = {
     image: result,
     caption: caption,
@@ -70,7 +73,7 @@ const likePost = async (req, res, next) => {
   const { _id } = req.user;
   const { postId } = req.params;
   try {
-    userLikePost(_id, postId);
+    const updated = userLikePost(_id, postId);
     res.status(201).send({ message: "you have liked" });
   } catch (error) {
     error.status = 400;
@@ -84,7 +87,7 @@ const dislikePost = async (req, res, next) => {
   const { _id } = req.user;
   const { postId } = req.params;
   try {
-    userDislikePost(_id, postId);
+    const updated = userDislikePost(_id, postId);
     console.log("first");
     res.status(202).send({ message: "you have disliked" });
   } catch (error) {

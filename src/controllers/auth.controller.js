@@ -59,6 +59,11 @@ const login = catchAsync(async (req, res) => {
     expires,
   });
 });
+// const logout = catchAsync(async (req, res) => {
+//   const authHeader = req.headers.authorization;
+//   const token = authHeader.split(" ")[1];
+//   await tokenService.logoutToken(token, res);
+// });
 const googleLogin = catchAsync(async (req, res, next) => {
   const email = await googleService.googleAuth(req.body.idToken, next);
   const user = await authService.loginUserWithGoogle(email);
@@ -112,5 +117,6 @@ module.exports = {
   verifyEmail,
   googleLogin,
   updatePassword,
+  // logout,
   self,
 };

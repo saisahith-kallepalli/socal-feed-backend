@@ -27,9 +27,9 @@ router
   .put(upload.single("image"), userController.profileImage);
 router.route("/profile/remove").delete(userController.profileImageRemove);
 // Routes: update company
-router
-  .route("/org/:orgId")
-  .patch(validate(userValidation.updateOrg), userController.updateOrg);
+// router
+//   .route("/org/:orgId")
+//   .patch(validate(userValidation.updateOrg), userController.updateOrg);
 
 module.exports = router;
 

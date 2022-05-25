@@ -66,6 +66,24 @@ const verifyToken = async (token, type) => {
   return tokenDoc;
 };
 
+const logoutToken = (token, res) => {
+  try {
+    jwt.sign(token, { expiresIn: 1 }, (logout, err) => {
+      console.log({ token: token.token });
+    });
+    res.send({ msg: "You have been Logged Out" });
+  } catch (error) {
+    res.send({ msg: "error" });
+  }
+  // jwt.sign(token, { expiresIn: "1" }, (logout, err) => {
+  //   if (logout) {
+  //     res.send({ msg: "You have been Logged Out" });
+  //   } else {
+  //     res.send({ msg: "Error" });
+  //   }
+  // });
+};
+
 /**
  * Generate auth tokens
  * @param {User} user
@@ -142,4 +160,5 @@ module.exports = {
   generateAuthTokens,
   generateResetPasswordToken,
   generateVerifyEmailToken,
+  logoutToken,
 };

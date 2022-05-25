@@ -40,6 +40,7 @@ router.post(
   authController.verifyEmail
 );
 router.get("/self", auth(), authController.self);
+// router.get("/logout", auth(), authController.logout);
 
 module.exports = router;
 

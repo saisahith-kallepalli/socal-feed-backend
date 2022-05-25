@@ -11,19 +11,23 @@ const getPostsByUserId = async (filter, options) => {
 };
 
 const userLikePost = async (userId, postId) => {
-  await Posts.updateOne(
+  return await Posts.findOneAndUpdate(
     { _id: postId },
     {
       $push: { likes: { id: userId } },
-    }
+    },
+    { new: true }
   );
 };
 const userDislikePost = async (userId, postId) => {
-  await Posts.updateOne(
+  const user = await User.findById(userId);
+  console.log(user._id);
+  return await Posts.findOneAndUpdate(
     { _id: postId },
     {
-      $pullAll: { likes: [{ id: userId }] },
-    }
+      $pull: { likes: { id: userId } },
+    },
+    { new: true }
   );
 };
 
@@ -34,24 +38,12 @@ const userSavedPost = async (userId, postId) => {
       $push: { saved: { id: userId } },
     }
   );
-  await User.updateOne(
-    { _id: userId },
-    {
-      $push: { saved: { id: postId } },
-    }
-  );
 };
 const userUnSavePost = async (userId, postId) => {
   await Posts.updateOne(
     { _id: postId },
     {
       $pullAll: { saved: [{ id: userId }] },
-    }
-  );
-  await User.updateOne(
-    { _id: userId },
-    {
-      $pullAll: { saved: [{ id: postId }] },
     }
   );
 };
