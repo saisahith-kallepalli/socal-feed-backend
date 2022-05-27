@@ -18,4 +18,8 @@ router
   .route("/like/:postId")
   .post(postController.likePost)
   .delete(postController.dislikePost);
+router
+  .route("/save/:postId")
+  .post(postController.savePost)
+  .delete(postController.unSavePost);
 module.exports = router;

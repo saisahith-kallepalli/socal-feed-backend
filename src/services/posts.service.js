@@ -32,20 +32,40 @@ const userDislikePost = async (userId, postId) => {
 };
 
 const userSavedPost = async (userId, postId) => {
-  await Posts.updateOne(
-    { _id: postId },
-    {
-      $push: { saved: { id: userId } },
-    }
-  );
+  try {
+    await Posts.updateOne(
+      { _id: postId },
+      {
+        $push: { saved: { id: userId } },
+      }
+    );
+    await User.updateOne(
+      { _id: userId },
+      {
+        $push: { saved: { id: postId } },
+      }
+    );
+  } catch (error) {
+    throw Error;
+  }
 };
 const userUnSavePost = async (userId, postId) => {
-  await Posts.updateOne(
-    { _id: postId },
-    {
-      $pullAll: { saved: [{ id: userId }] },
-    }
-  );
+  try {
+    await Posts.updateOne(
+      { _id: postId },
+      {
+        $pull: { saved: { id: userId } },
+      }
+    );
+    await User.updateOne(
+      { _id: userId },
+      {
+        $pull: { saved: { id: postId } },
+      }
+    );
+  } catch (error) {
+    throw Error;
+  }
 };
 module.exports = {
   queryPosts,

@@ -101,7 +101,7 @@ const savePost = async (req, res, next) => {
   const { postId } = req.params;
   try {
     userSavedPost(_id, postId);
-    res.status(201).send({ message: "you have liked" });
+    res.status(201).send({ message: "you have saved" });
   } catch (error) {
     error.status = 400;
     next(error);
@@ -112,7 +112,7 @@ const unSavePost = async (req, res, next) => {
   const { postId } = req.params;
   try {
     userUnSavePost(_id, postId);
-    res.status(201).send({ message: "you have liked" });
+    res.status(201).send({ message: "you have unsaved" });
   } catch (error) {
     error.status = 400;
     next(error);
@@ -125,4 +125,6 @@ module.exports = {
   getUserIdPosts,
   dislikePost,
   likePost,
+  savePost,
+  unSavePost,
 };
