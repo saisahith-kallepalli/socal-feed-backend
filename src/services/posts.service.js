@@ -19,6 +19,13 @@ const userLikePost = async (userId, postId) => {
     { new: true }
   );
 };
+
+const deletePost = async (userId, postId) => {
+  return await Posts.findOneAndDelete({ _id: postId, createdBy: userId });
+};
+const updatePost = async (userId, postId,caption) => {
+  return await Posts.findOneAndUpdate({ _id: postId, createdBy: userId },{caption:caption});
+};
 const userDislikePost = async (userId, postId) => {
   const user = await User.findById(userId);
   console.log(user._id);
