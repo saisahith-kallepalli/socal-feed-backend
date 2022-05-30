@@ -23,8 +23,11 @@ const userLikePost = async (userId, postId) => {
 const deletePost = async (userId, postId) => {
   return await Posts.findOneAndDelete({ _id: postId, createdBy: userId });
 };
-const updatePost = async (userId, postId,caption) => {
-  return await Posts.findOneAndUpdate({ _id: postId, createdBy: userId },{caption:caption});
+const updatePost = async (userId, postId, caption) => {
+  return await Posts.findOneAndUpdate(
+    { $and: [{ createdBy: userId }, { _id: postId }] },
+    { $set: { caption: caption } }
+  );
 };
 const userDislikePost = async (userId, postId) => {
   const user = await User.findById(userId);
@@ -36,6 +39,17 @@ const userDislikePost = async (userId, postId) => {
     },
     { new: true }
   );
+};
+const savedPostsByUser = async (userId, postId) => {
+  const userSaved = await User.findById(userId)
+    .populate({
+      path: "saved.id",
+      populate: {
+        path: "createdBy",
+      },
+    })
+    .selected(saved);
+  return userSaved;
 };
 
 const userSavedPost = async (userId, postId) => {
@@ -81,4 +95,6 @@ module.exports = {
   userDislikePost,
   userSavedPost,
   userUnSavePost,
+  deletePost,
+  updatePost,savedPostsByUser
 };

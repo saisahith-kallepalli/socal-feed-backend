@@ -6,6 +6,8 @@ const {
   userDislikePost,
   userSavedPost,
   userUnSavePost,
+  updatePost,
+  deletePost,
 } = require("../services/posts.service");
 const {
   uploadToCloudinary,
@@ -73,7 +75,7 @@ const likePost = async (req, res, next) => {
   const { _id } = req.user;
   const { postId } = req.params;
   try {
-    const updated = userLikePost(_id, postId);
+    const updated = await userLikePost(_id, postId);
     res.status(201).send({ message: "you have liked" });
   } catch (error) {
     error.status = 400;
@@ -87,7 +89,7 @@ const dislikePost = async (req, res, next) => {
   const { _id } = req.user;
   const { postId } = req.params;
   try {
-    const updated = userDislikePost(_id, postId);
+    const updated = await userDislikePost(_id, postId);
     console.log("first");
     res.status(202).send({ message: "you have disliked" });
   } catch (error) {
@@ -96,17 +98,51 @@ const dislikePost = async (req, res, next) => {
   }
 };
 
+const updatePostCaption = async (req, res, next) => {
+  const { _id } = req.user;
+  const { caption } = req.body;
+  const { postId } = req.params;
+  try {
+    const updated = await updatePost(_id, postId, caption);
+    res.status(201).send({ message: "you have updated" });
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
+};
+const deleteUploadedPost = async (req, res, next) => {
+  const { _id } = req.user;
+  const { postId } = req.params;
+  try {
+    await deletePost(_id, postId);
+    res.status(201).send({ message: "you have deleted" });
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
+};
 const savePost = async (req, res, next) => {
   const { _id } = req.user;
   const { postId } = req.params;
   try {
-    userSavedPost(_id, postId);
+    await userSavedPost(_id, postId);
     res.status(201).send({ message: "you have saved" });
   } catch (error) {
     error.status = 400;
     next(error);
   }
 };
+const getSavePosts = async (req, res, next) => {
+  const { _id } = req.user;
+  try {
+    const savedData = await savedPostsByUser(_id);
+    res.status(201).send({ saved: savedData });
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
+};
+
 const unSavePost = async (req, res, next) => {
   const { _id } = req.user;
   const { postId } = req.params;
@@ -127,4 +163,6 @@ module.exports = {
   likePost,
   savePost,
   unSavePost,
+  updatePostCaption,
+  deleteUploadedPost,
 };

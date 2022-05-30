@@ -12,6 +12,8 @@ router
   .route("/")
   .post(upload.array("image", 50), postController.uploadPost)
   .get(postController.getAllPosts);
+router.put("/update/:postId", postController.updatePostCaption);
+router.delete("/delete/:postId", postController.deleteUploadedPost);
 router.get("/self", postController.getUserPosts);
 router.get("/:userId", postController.getUserIdPosts);
 router
