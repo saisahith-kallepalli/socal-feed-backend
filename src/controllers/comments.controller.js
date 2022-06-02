@@ -1,3 +1,4 @@
+const httpStatus = require("http-status");
 const Comments = require("../models/comments.model");
 const {
   createComment,
@@ -34,7 +35,6 @@ const getComments = async (req, res, next) => {
     next(error);
   }
 };
-
 
 //This function will Add like to function (pull method)
 const likeComment = async (req, res, next) => {
@@ -85,11 +85,12 @@ const deleteComment = async (req, res, next) => {
 
 const replyComment = async (req, res, next) => {
   const { commentId, postId } = req.params;
-  const { id } = req.user;
+  const { _id } = req.user;
   const { comment } = req.body;
   try {
-    const reply = await replyToComment(commentId, postId, id, comment, next);
+    const reply = await replyToComment(commentId, postId, _id, comment, next);
     if (reply) {
+      console.log(httpStatus["201_MESSAGE"]);
       res.status(201).send({ massage: "reply is created" });
     }
   } catch (error) {

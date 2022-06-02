@@ -50,12 +50,13 @@ const replyToComment = async (commentId, postId, userId, comment, next) => {
       postId: postId,
     });
     const newComment = await newReply.save();
-    console.log(newComment);
-    await comments.updateOne(
-      { $and: [{ _id: commentId, postId: postId }] },
-      {
-        $push: { reply: { id: newComment._id } },
-      }
+    console.log(
+      await comments.findOneAndUpdate(
+        { $and: [{ _id: commentId, postId: postId }] },
+        {
+          $push: { reply: { id: newComment._id } },
+        }
+      )
     );
     return true;
   } catch (error) {
