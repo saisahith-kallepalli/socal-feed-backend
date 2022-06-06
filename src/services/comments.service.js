@@ -1,4 +1,5 @@
 const comments = require("../models/comments.model");
+const User = require("../models/user.model");
 
 const createComment = async (userId, postId, comment) => {
   const newComment = new comments({
@@ -33,11 +34,14 @@ const userLikeComment = async (userId, commentId) => {
   );
 };
 const userDislikeComment = async (userId, commentId) => {
-  await comments.updateOne(
+  const user = await User.findById(userId);
+  console.log(user._id);
+  return await comments.findOneAndUpdate(
     { _id: commentId },
     {
-      $pull: { likes: [{ id: userId }] },
-    }
+      $pull: { likes: { id: userId } },
+    },
+    { new: true }
   );
 };
 
