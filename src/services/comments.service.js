@@ -36,7 +36,7 @@ const userDislikeComment = async (userId, commentId) => {
   await comments.updateOne(
     { _id: commentId },
     {
-      $pullAll: { likes: [{ id: userId }] },
+      $pull: { likes: [{ id: userId }] },
     }
   );
 };
