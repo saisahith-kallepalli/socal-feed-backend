@@ -8,6 +8,7 @@ const {
   userUnSavePost,
   updatePost,
   deletePost,
+  savedPostsByUser,
 } = require("../services/posts.service");
 const {
   uploadToCloudinary,
@@ -124,6 +125,7 @@ const deleteUploadedPost = async (req, res, next) => {
 const savePost = async (req, res, next) => {
   const { _id } = req.user;
   const { postId } = req.params;
+  console.log(_id, postId);
   try {
     await userSavedPost(_id, postId);
     res.status(201).send({ message: "you have saved" });
@@ -134,6 +136,7 @@ const savePost = async (req, res, next) => {
 };
 const getSavePosts = async (req, res, next) => {
   const { _id } = req.user;
+  console.log("first");
   try {
     const savedData = await savedPostsByUser(_id);
     res.status(201).send({ saved: savedData });
@@ -165,4 +168,5 @@ module.exports = {
   unSavePost,
   updatePostCaption,
   deleteUploadedPost,
+  getSavePosts,
 };

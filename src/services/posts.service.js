@@ -41,14 +41,12 @@ const userDislikePost = async (userId, postId) => {
   );
 };
 const savedPostsByUser = async (userId, postId) => {
-  const userSaved = await User.findById(userId)
-    .populate({
-      path: "saved.id",
-      populate: {
-        path: "createdBy",
-      },
-    })
-    .selected(saved);
+  const userSaved = await User.findById(userId).populate({
+    path: "saved.id",
+    populate: {
+      path: "createdBy",
+    },
+  });
   return userSaved;
 };
 
@@ -96,5 +94,6 @@ module.exports = {
   userSavedPost,
   userUnSavePost,
   deletePost,
-  updatePost,savedPostsByUser
+  updatePost,
+  savedPostsByUser,
 };
