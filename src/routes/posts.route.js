@@ -8,7 +8,6 @@ const { createPost } = require("../validations/posts.validation");
 
 router.use(auth());
 
-router.get("/saved", postController.getSavePosts);
 router
   .route("/")
   .post(upload.array("image", 50), postController.uploadPost)
@@ -25,5 +24,6 @@ router
   .route("/save/:postId")
   .post(postController.savePost)
   .delete(postController.unSavePost);
+router.get("/self/saved", postController.getSavePosts);
 
 module.exports = router;
