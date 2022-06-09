@@ -26,18 +26,14 @@ const getUser = {
 };
 
 const updateUser = {
-  params: Joi.object().keys({
-    userId: Joi.required().custom(objectId),
+  body: Joi.object().keys({
+    email: Joi.string().email(),
+    name: Joi.string(),
+    gender: Joi.string(),
+    mobile: Joi.string(),
+    bio: Joi.string(),
+    dateOfBirth: Joi.string(),
   }),
-  body: Joi.object()
-    .keys({
-      email: Joi.string().email(),
-      name: Joi.string(),
-      gender: Joi.string(),
-      mobile: Joi.string(),
-      bio: Joi.string(),
-    })
-    .min(1),
 };
 
 const updateOrg = {

@@ -3,6 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const { private, paginate, softDelete } = require("./plugins");
 const { roles } = require("../config/roles");
+const validatePhoneNumber = require("validate-phone-number-node-js");
 const Schema = mongoose.Schema;
 
 const userSchema = mongoose.Schema(
@@ -43,6 +44,7 @@ const userSchema = mongoose.Schema(
       },
     },
     saved: [{ id: { type: Schema.Types.ObjectId, ref: "post" } }],
+    dateOfBirth: { type: String, required: false },
     password: {
       type: String,
       required: true,
@@ -61,6 +63,7 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isActive: { type: Boolean, default: true },
     mobile: {
       type: String,
       validate: [validateNumber, "invalid number"],
@@ -71,7 +74,7 @@ const userSchema = mongoose.Schema(
   }
 );
 function validateNumber(value) {
-  console.log(value);
+  console.log(value.trim());
   return validatePhoneNumber.validate(value);
 }
 userSchema.plugin(softDelete);

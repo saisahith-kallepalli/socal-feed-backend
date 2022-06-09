@@ -49,6 +49,7 @@
     "pm2": "^5.2.0",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.3.0",
+    "validate-phone-number-node-js": "^0.0.1",
     "validator": "^13.7.0",
     "winston": "^3.7.2"
   },

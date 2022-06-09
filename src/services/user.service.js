@@ -66,7 +66,14 @@ const getUserByEmail = async (email) => {
     email,
   });
 };
-
+const updateUserActive = async (email, value) => {
+  return User.findOneAndUpdate(
+    {
+      email: email,
+    },
+    { $set: { isActive: value } }
+  );
+};
 const updateProfileImage = async (userId, filePath, next) => {
   const user = await getUserById(userId);
   console.log(userId);
@@ -167,5 +174,5 @@ module.exports = {
   updateOrgById,
   deleteUserById,
   updateProfileImage,
-  removeProfileImage,
+  removeProfileImage,updateUserActive
 };

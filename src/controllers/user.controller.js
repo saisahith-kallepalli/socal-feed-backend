@@ -40,7 +40,8 @@ const getUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  const user = await userService.updateUserById(req.params.userId, req.body);
+  const { id } = req.user;
+  const user = await userService.updateUserById(id, req.body);
   res.send(user);
 });
 

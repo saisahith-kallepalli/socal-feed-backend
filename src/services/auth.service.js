@@ -16,7 +16,12 @@ const loginUserWithEmailAndPassword = async (email, password) => {
   if (!user || user.deleted || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password");
   }
+  await userService.updateUserActive(email, true);
   return await user.populate("name email");
+};
+
+const logoutUser = async (email) => {
+  await userService.updateUserActive(email, false);
 };
 
 const loginUserWithGoogle = async (email) => {
@@ -98,4 +103,5 @@ module.exports = {
   resetPassword,
   verifyEmail,
   setNewPassword,
+  logoutUser,
 };

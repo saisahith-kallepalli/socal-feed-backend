@@ -59,6 +59,10 @@ const login = catchAsync(async (req, res) => {
     expires,
   });
 });
+const logout = catchAsync(async (req, res) => {
+  await authService.logoutUser(req.user.email);
+  res.status(httpStatus.NO_CONTENT).send();
+});
 // const logout = catchAsync(async (req, res) => {
 //   const authHeader = req.headers.authorization;
 //   const token = authHeader.split(" ")[1];
@@ -117,6 +121,6 @@ module.exports = {
   verifyEmail,
   googleLogin,
   updatePassword,
-  // logout,
+  logout,
   self,
 };
