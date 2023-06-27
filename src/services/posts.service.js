@@ -11,6 +11,7 @@ const getPostsByUserId = async (filter, options) => {
 };
 
 const userLikePost = async (userId, postId) => {
+  const post= await Posts.findOne({_id:postId})
   return await Posts.findOneAndUpdate(
     { _id: postId },
     {

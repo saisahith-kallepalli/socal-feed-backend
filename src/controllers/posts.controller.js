@@ -75,29 +75,27 @@ const getUserIdPosts = async (req, res, next) => {
 const likePost = async (req, res, next) => {
   const { _id } = req.user;
   const { postId } = req.params;
+  const post= await Posts.findOne({_id:postId})
+  const filtered=post.likes.map((each)=>String(each.id)).filter((eachId)=>eachId===String(_id))
+  console.log("filtered",filtered)
   try {
-    const updated = await userLikePost(_id, postId);
-    res.status(201).send({ message: "you have liked" });
+    if (filtered.length) {
+      const updated = await userDislikePost(_id, postId);
+
+      res.status(202).send({ message: "you have disliked" });
+    } else {
+      const updated = await userLikePost(_id, postId);
+      res.status(201).send({ message: "you have liked" });
+    }
   } catch (error) {
     error.status = 400;
     next(error);
   }
 };
 
-//this function to disLike post
 
-const dislikePost = async (req, res, next) => {
-  const { _id } = req.user;
-  const { postId } = req.params;
-  try {
-    const updated = await userDislikePost(_id, postId);
-    console.log("first");
-    res.status(202).send({ message: "you have disliked" });
-  } catch (error) {
-    error.status = 400;
-    next(error);
-  }
-};
+
+
 
 const updatePostCaption = async (req, res, next) => {
   const { _id } = req.user;
