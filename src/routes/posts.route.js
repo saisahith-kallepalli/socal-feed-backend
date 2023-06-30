@@ -22,7 +22,6 @@ router
 router
   .route("/save/:postId")
   .post(postController.savePost)
-  .delete(postController.unSavePost);
 router.get("/self/saved", postController.getSavePosts);
 
 module.exports = router;

@@ -123,14 +123,23 @@ const deleteUploadedPost = async (req, res, next) => {
 const savePost = async (req, res, next) => {
   const { _id } = req.user;
   const { postId } = req.params;
-  console.log(_id, postId);
+  const post= await Posts.findOne({_id:postId})
+  const filtered=post.saved.map((each)=>String(each.id)).filter((eachId)=>eachId===String(_id))
+  console.log("filtered",filtered)
   try {
-    await userSavedPost(_id, postId);
+    if (filtered.length) {
+      await userUnSavePost(_id, postId);
+      res.status(201).send({ message: "you have unsaved" });
+    } else {
+      userSavedPost(_id, postId);
     res.status(201).send({ message: "you have saved" });
+    }
   } catch (error) {
     error.status = 400;
     next(error);
   }
+  console.log(_id, postId);
+ 
 };
 const getSavePosts = async (req, res, next) => {
   const { _id } = req.user;
@@ -144,26 +153,14 @@ const getSavePosts = async (req, res, next) => {
   }
 };
 
-const unSavePost = async (req, res, next) => {
-  const { _id } = req.user;
-  const { postId } = req.params;
-  try {
-    userUnSavePost(_id, postId);
-    res.status(201).send({ message: "you have unsaved" });
-  } catch (error) {
-    error.status = 400;
-    next(error);
-  }
-};
+
 module.exports = {
   uploadPost,
   getAllPosts,
   getUserPosts,
   getUserIdPosts,
-  dislikePost,
   likePost,
   savePost,
-  unSavePost,
   updatePostCaption,
   deleteUploadedPost,
   getSavePosts,
