@@ -15,5 +15,4 @@ router.post("/comment/:postId/:commentId", commentController.replyComment);
 router
   .route("/like/:commentId")
   .post(commentController.likeComment)
-  .delete(commentController.dislikeComment);
 module.exports = router;

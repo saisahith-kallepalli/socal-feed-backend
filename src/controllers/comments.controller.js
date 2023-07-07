@@ -40,28 +40,28 @@ const getComments = async (req, res, next) => {
 const likeComment = async (req, res, next) => {
   const { _id } = req.user;
   const { commentId } = req.params;
+  const comment= await Comments.findOne({_id:commentId})
+  const filtered=comment.likes.map((each)=>String(each.id))
+  console.log("filtered",filtered,comment.likes,_id)
   try {
-    await userLikeComment(_id, commentId);
-    res.status(200).send({ like: true, message: "you have liked" });
+    if (filtered.length) {
+      
+      await userDislikeComment(_id, commentId);
+      res.status(202).send({ like: false, message: "you have disliked" });
+    } else {
+      await userLikeComment(_id, commentId);
+      res.status(200).send({ like: true, message: "you have liked" });
+    }
   } catch (error) {
     error.status = 400;
     next(error);
   }
+ 
 };
 
 //this function will Remove like to function (pullAll method)
 
-const dislikeComment = async (req, res, next) => {
-  const { _id } = req.user;
-  const { commentId } = req.params;
-  try {
-    await userDislikeComment(_id, commentId);
-    res.status(202).send({ like: false, message: "you have disliked" });
-  } catch (error) {
-    error.status = 400;
-    next(error);
-  }
-};
+
 // it will delete comment
 const deleteComment = async (req, res, next) => {
   const { commentId } = req.params;
@@ -102,6 +102,5 @@ module.exports = {
   postComment,
   getComments,
   likeComment,
-  dislikeComment,
   replyComment,
 };
