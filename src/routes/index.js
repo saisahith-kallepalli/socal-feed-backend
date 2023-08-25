@@ -5,7 +5,6 @@ const postsRoute = require("./posts.route");
 const docsRoute = require("./docs.route");
 const commentsRoute = require("./comments.route");
 const config = require("../config/config");
-
 const router = express.Router();
 
 // Routes index

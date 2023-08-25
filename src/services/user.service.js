@@ -1,5 +1,5 @@
 const httpStatus = require("http-status");
-const { User, Organization } = require("../models");
+const { User, Organization, Posts } = require("../models");
 const ApiError = require("../utils/ApiError");
 const { uploadToCloudinary } = require("./upload.service");
 
@@ -43,7 +43,16 @@ const createUser = async (userBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryUsers = async (filter, options) => {
-  const users = await User.paginate(filter, options);
+  const users = await User.paginate(
+    {
+      $or: [
+        { name: { $regex: filter.name, $options: "i" } }, // Case-insensitive search
+        { firstName: { $regex: filter.name, $options: "i" } },
+        { lastName: { $regex: filter.name, $options: "i" } },
+      ],
+    },
+    { select: "_id name image email firstName lastName", ...options }
+  );
   return users;
 };
 
@@ -53,7 +62,12 @@ const queryUsers = async (filter, options) => {
  * @returns {Promise<User>}
  */
 const getUserById = async (id) => {
-  return User.findById(id);
+  console.log(id, "----id");
+  const user = await User.findById(id).populate([
+    { path: "saved.id"},
+  ]);
+
+  return user;
 };
 
 /**
@@ -174,5 +188,6 @@ module.exports = {
   updateOrgById,
   deleteUserById,
   updateProfileImage,
-  removeProfileImage,updateUserActive
+  removeProfileImage,
+  updateUserActive,
 };

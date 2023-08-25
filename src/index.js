@@ -4,17 +4,19 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
-
-let server;
+const socketIo = require('./socket/socketConections');
+const server=require("http").createServer(app)
+// let server;
 logger.info(`Node Environment => ${config.env}`);
 
 // Connect to MongoDB using mongoose
 mongoose.connect(config.mongoose.url, config.mongoose.options).then((db) => {
   logger.info(`Connected to MongoDB => ${config.mongoose.url}`);
-  server = app.listen(config.port, () => {
+  server.listen(config.port, () => {
     logger.info(`Node server listening on port => ${config.port}`);
   });
 });
+socketIo(server)
 
 // Manually close the server if an unhandled exception occurs
 const exitHandler = () => {

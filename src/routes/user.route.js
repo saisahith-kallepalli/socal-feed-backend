@@ -10,6 +10,7 @@ const router = express.Router();
 // Token authentication for all routes defined in this file
 router.use(auth());
 
+// router.post("/search", userController.getSearchUsers);
 // Routes: get users, create user
 router
   .route("/")

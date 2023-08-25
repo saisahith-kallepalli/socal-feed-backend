@@ -48,7 +48,6 @@ if (config.env === 'production') {
 
 // Define routes index in separate file. 
 app.use('/', routes);
-
 // Send back a 404 error for any unknown api request
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));

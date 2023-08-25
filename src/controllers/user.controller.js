@@ -9,6 +9,7 @@ const {
   updateProfileImage,
   removeProfileImage,
 } = require("../services/user.service");
+const { Posts } = require("../models");
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser({
@@ -20,6 +21,7 @@ const createUser = catchAsync(async (req, res) => {
 
 const getUsers = catchAsync(async (req, res) => {
   const filter = pick(req.query, ["name"]);
+  console.log(filter);
   const options = pick(req.query, ["sortBy", "limit", "page"]);
   const result = await userService.queryUsers(filter, {
     ...options,
@@ -32,11 +34,15 @@ const getUsers = catchAsync(async (req, res) => {
 });
 
 const getUser = catchAsync(async (req, res) => {
+  console.log(req.params.userId);
   const user = await userService.getUserById(req.params.userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
-  res.send(req.user);
+  const posts = await Posts.find({ createdBy: req.params.userId }).populate([
+    { path: "createdBy", select: "_id name email firstName lastName" },
+  ]);
+  res.send({ user, posts: posts });
 });
 
 const updateUser = catchAsync(async (req, res) => {

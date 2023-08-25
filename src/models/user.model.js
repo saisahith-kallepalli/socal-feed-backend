@@ -43,6 +43,7 @@ const userSchema = mongoose.Schema(
         }
       },
     },
+    chatrooms: [{ type: Schema.Types.ObjectId, ref: "chatroom" }],
     saved: [{ id: { type: Schema.Types.ObjectId, ref: "post" } }],
     dateOfBirth: { type: String, required: false },
     password: {
